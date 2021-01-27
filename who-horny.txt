@@ -1,0 +1,21 @@
+you can pull the alarm for the following:
+
+horny - the original purpose
+assholery - general assholery that does not fit under other categories
+hate - hateful and intolerant speech
+fire - starting unncessary crap
+carbon-monoxide - someone being very toxic (i.e. using a logical fallacy such as ad hominem during a debate)
+bullshit - promoting and pushing bullshit into people's faces (i.e. scams or excessive self promo)
+illegal - illegal content or actions (i.e. porn in a server for minors / hacking)
+borderline-illegal - posting content that while not illegal is unacceptable (i.e. excessive simping for people who have stated that they do not want to be simped over)
+excessive - spamming, pinging excessively, etc.
+
+to pull the alarm: $ pull;<FULL-DISCORD-TAG>;<CRIME>
+the <CRIME> argument must be one of the preset crimes 
+
+to see someone's stats: $ stat;<FULL-DISCORD-TAG>;<CRIME>
+
+to hold a poll: $ poll;<POLL-PROMPT>;<NUMBER-OF-CHOICES>;<CHOICE>;<CHOICE> (goes on for as many choices as is listed)
+
+make sure to use the person's REAL discord name, not their nickname
+and yes, the space after the '$' is required
