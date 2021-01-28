@@ -134,4 +134,4 @@ async def on_message(message):
         await message.channel.send(f.text)
     
     
-client.run('NzkzMzQ4NzQ3MDk0MTMwNzM4.X-q9mQ.PczQYUshzVmF9Qo2rFbDccEVEZ8')
+client.run('YOUR TOKEN HERE')
