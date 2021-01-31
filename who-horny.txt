@@ -17,5 +17,7 @@ to see someone's stats: $ stat;<FULL-DISCORD-TAG>;<CRIME>
 
 to hold a poll: $ poll;<POLL-PROMPT>;<NUMBER-OF-CHOICES>;<CHOICE>;<CHOICE> (goes on for as many choices as is listed)
 
+to see the horny log: $ log (a DM will be sent)
+
 make sure to use the person's REAL discord name, not their nickname
 and yes, the space after the '$' is required
