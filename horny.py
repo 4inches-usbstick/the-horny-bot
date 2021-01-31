@@ -16,7 +16,7 @@ def pull(puller, perp, crime, time):
     if crime in crimes:
         towrite = 'User '+str(perp)+' had the alarm pulled on them for: '+str(crime)+' at '+str(time)+' by user '+str(puller)+'.'
         toreturn = towrite
-        f.write(towrite+'\n')
+        #f.write(towrite+'\n')
         #await message.channel.send(towrite)
        
         towrite = str(crime)+':'+str(perp)
@@ -43,7 +43,7 @@ def stat(person, crime):
     int(total)
     
     #await message.channel.send('User '+person+' has had the alarm pulled on them '+total+' times in total and '+crimes+' times for that particular crime.')
-    toreturn = 'User '+str(person)+' has had the alarm pulled on them '+str(int(total / 2))+' times in total and '+str(crimesa)+' times for that particular crime.'
+    toreturn = 'User '+str(person)+' has had the alarm pulled on them '+str(total)+' times in total and '+str(crimesa)+' times for that particular crime.'
    
     f.close()
     return(toreturn)
@@ -67,6 +67,7 @@ async def on_ready():
     
 @client.event
 async def on_message(message):
+    global curpp
 
     z = message.content.split(';')
     if z[0] == '$ pull':
@@ -78,14 +79,48 @@ async def on_message(message):
         await message.channel.send(randombullshitoutput)        
    
     if z[0] == '$ sa':
-        global curpp
         if float(z[2]) == float(curpp):
             await message.channel.send(z[1])
             curpp = random.random()
             curpp = float(curpp)
             print(curpp)
         elif float(z[2]) != float(curpp):
-            await message.channel.send('You are forbidden to send messages as me.')
+            await message.channel.send('Error: invalid key')
+            curpp = random.random()
+            curpp = float(curpp)
+            print(curpp)
+            
+    if z[0] == '$ unpull':
+        if float(z[1]) == float(curpp):
+            f = open('list.txt', 'r')
+            contents = f.read()
+            f.close()
+            offset0 = contents.find(z[2])
+            offset1 = int(len(z[2])) + offset0
+            #remote_contents = contents[offset0:offset1]
+            halfbefore = contents[:offset0]
+            halfafter = contents[offset1:]
+            
+            if offset0 != -1:
+                f = open('list.txt','w')
+                f.write(halfbefore)
+                f.write('ACTIVATION OVERWRITE')
+                f.write(halfafter)
+                f.close()
+                await message.channel.send('Horny activation at '+str(offset0)+'-'+str(offset1)+' was erased ')
+                #await message.channel.send(z[1])
+                curpp = random.random()
+                curpp = float(curpp)
+                print(curpp)
+            else:
+                await message.channel.send('Error: Substring not found within string')
+                await message.channel.send(z[1])
+                curpp = random.random()
+                curpp = float(curpp)
+                print(curpp)
+        else:
+            await message.channel.send('Error: invalid key')
+            await message.channel.send(z[1])
             curpp = random.random()
             curpp = float(curpp)
             print(curpp)
@@ -95,6 +130,14 @@ async def on_message(message):
         contents = f.read()
         f.close()
         await message.channel.send(contents)
+        
+    if z[0] == '$ log':
+        f = open('list.txt', 'r')
+        contents = f.read()
+        f.close()
+        await message.author.send(contents)
+        await message.channel.send('User has requested a copy of list.txt - check DM')
+        
         
     if z[0] == '$ poll':
         ok = 1
@@ -130,8 +173,8 @@ async def on_message(message):
                 instances = g.count(i)
                 await message.channel.send('Option **'+i+'** got **'+str(instances)+'** votes.')
                 
-        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhog-jingobone&key=hubhog-jingobone')
+        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
         await message.channel.send(f.text)
     
     
-client.run('YOUR TOKEN HERE')
+client.run('your token here')
