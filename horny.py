@@ -6,7 +6,7 @@ import random
 print('HRN')
 crimes = ['horny','assholery','hate','fire','carbon-monoxide','bullshit','illegal','borderline-illegal','excessive','w-t-a-f']
 #[being too horny], [being just an asshole], [hateful speech], [starting unnecessacry crap], [drowning in toxcity - especially for debates or discussions - fallacies such as ad hominem], [spreading bullshit]
-
+ip = 'YOUR IP HERE'
 
 
 
@@ -153,27 +153,27 @@ async def on_message(message):
         
         if ok == 1:
             await message.channel.send('Attempting to open Chatbox... (all other commands will be suspended during this procedure)')
-            f = requests.get('http://71.255.240.10:8080/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer')
+            f = requests.get('http://'+ip+'/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer')
             await message.channel.send('POLL: '+z[1])
         
             qty = int(z[2])
             options = []
         
             while qty > 0:
-                await message.channel.send(z[qty + 2] + ' - ' + 'http://71.255.240.10:8080/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
+                await message.channel.send(z[qty + 2] + ' - ' + 'http://'+ip+'/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
                 options.append(z[qty + 2])
                 qty = qty - 1
             
             time.sleep(60)
             await message.channel.send('Polling has closed. Counting results...')
-            f = requests.get('http://71.255.240.10:8080/textengine/sitechats/voting-tmp')
+            f = requests.get('http://'+ip+'/textengine/sitechats/voting-tmp')
             g = f.text
             
             for i in options:
                 instances = g.count(i)
                 await message.channel.send('Option **'+i+'** got **'+str(instances)+'** votes.')
                 
-        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
+        f = requests.get('http://'+ip+'/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
         await message.channel.send(f.text)
     
     
