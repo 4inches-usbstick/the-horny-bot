@@ -193,7 +193,7 @@ async def on_message(message):
                 await message.channel.send(':no_entry_sign: Connection timed out')
                 
                 
-        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
+        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=CORRECTADMINKEY&key=CORRECTADMINKEY')
         await message.channel.send(f.text)
     
     
