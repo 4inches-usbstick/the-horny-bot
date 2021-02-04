@@ -6,7 +6,7 @@ import random
 print('HRN')
 crimes = ['horny','assholery','hate','fire','carbon-monoxide','bullshit','illegal','borderline-illegal','excessive','w-t-a-f']
 #[being too horny], [being just an asshole], [hateful speech], [starting unnecessacry crap], [drowning in toxcity - especially for debates or discussions - fallacies such as ad hominem], [spreading bullshit]
-ip = 'YOUR IP HERE'
+
 
 
 
@@ -138,6 +138,17 @@ async def on_message(message):
         await message.author.send(contents)
         await message.channel.send('User has requested a copy of list.txt - check DM')
         
+    if z[0] == '$ ping':
+        await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
+        
+        try:
+            awa = requests.get('http://71.255.240.10:8080/textengine/sitechats/sendmsg_integration.php', timeout=15)
+            await message.channel.send('CBE server response time: '+str(awa.elapsed))
+        except:
+            await message.channel.send('CBE server is dead.')
+        
+
+        
         
     if z[0] == '$ poll':
         ok = 1
@@ -153,28 +164,37 @@ async def on_message(message):
         
         if ok == 1:
             await message.channel.send('Attempting to open Chatbox... (all other commands will be suspended during this procedure)')
-            f = requests.get('http://'+ip+'/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer')
+            
+            try:
+                f = requests.get('http://71.255.240.10:8080/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer', timeout=15)
+            except:
+                await message.channel.send(':no_entry_sign: Connection timed out - users will not be able to vote for the poll')
+                
             await message.channel.send('POLL: '+z[1])
         
             qty = int(z[2])
             options = []
         
             while qty > 0:
-                await message.channel.send(z[qty + 2] + ' - ' + 'http://'+ip+'/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
+                await message.channel.send(z[qty + 2] + ' - ' + 'http://71.255.240.10:8080/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
                 options.append(z[qty + 2])
                 qty = qty - 1
             
-            time.sleep(60)
+            time.sleep(6)
             await message.channel.send('Polling has closed. Counting results...')
-            f = requests.get('http://'+ip+'/textengine/sitechats/voting-tmp')
-            g = f.text
+            try:
+                f = requests.get('http://71.255.240.10:8080/textengine/sitechats/voting-tmp', timeout=15)
+                g = f.text
             
-            for i in options:
-                instances = g.count(i)
-                await message.channel.send('Option **'+i+'** got **'+str(instances)+'** votes.')
+                for i in options:
+                    instances = g.count(i)
+                    await message.channel.send('Option **'+i+'** got **'+str(instances)+'** votes.')
+            except:
+                await message.channel.send(':no_entry_sign: Connection timed out')
                 
-        f = requests.get('http://'+ip+'/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
+                
+        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=hubhogjingobone&key=hubhogjingobone')
         await message.channel.send(f.text)
     
     
-client.run('your token here')
+client.run('bot token')
