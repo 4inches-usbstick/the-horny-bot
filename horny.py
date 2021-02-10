@@ -54,6 +54,19 @@ def find_nth(haystack, needle, n):
         start = haystack.find(needle, start+len(needle))
         n -= 1
     return start
+    
+def traceroute(username):
+    f = open('horny-dns.txt', 'r')
+    fds = f.read()
+    f.close()
+    if username+':' in fds:
+        offset1 = fds.find(username+':')
+        offset2 = fds.find(';', offset1)
+        dnslookup = fds[offset1:offset2]
+        dnslookupl = dnslookup.split(':')
+        return dnslookupl[1]
+    else:
+        return 'Lookup failed! Could not find user'
 
    
 client = discord.Client()
@@ -68,16 +81,28 @@ async def on_ready():
 @client.event
 async def on_message(message):
     global curpp
+    
 
     z = message.content.split(';')
     if z[0] == '$ pull':
-        randombullshitoutput = pull(message.author, z[1], z[2], message.created_at)
-        await message.channel.send(randombullshitoutput)
+        if traceroute(z[1]) != 'Lookup failed! Could not find user':
+            await message.channel.send('resolved name **'+z[1]+'** to **'+traceroute(z[1])+'**')
+            z[1] = traceroute(z[1])        
+            randombullshitoutput = pull(message.author, z[1], z[2], message.created_at)
+            await message.channel.send(randombullshitoutput)
+        else:
+            randombullshitoutput = pull(message.author, z[1], z[2], message.created_at)
+            await message.channel.send(randombullshitoutput)
         
     if z[0] == '$ stat':
-        randombullshitoutput = stat(z[1], z[2])        
-        await message.channel.send(randombullshitoutput)        
-   
+        if traceroute(z[1]) != 'Lookup failed! Could not find user':
+            await message.channel.send('resolved name **'+z[1]+'** to **'+traceroute(z[1])+'**')
+            z[1] = traceroute(z[1])
+            randombullshitoutput = stat(z[1], z[2])        
+            await message.channel.send(randombullshitoutput)        
+        else:
+            randombullshitoutput = stat(z[1], z[2])        
+            await message.channel.send(randombullshitoutput)       
     if z[0] == '$ sa':
         if float(z[2]) == float(curpp):
             await message.channel.send(z[1])
@@ -91,6 +116,9 @@ async def on_message(message):
             print(curpp)
             
     if z[0] == '$ unpull':
+        if traceroute(z[2]) != 'Lookup failed! Could not find user':
+            await message.channel.send('resolved name **'+z[2]+'** to **'+traceroute(z[2])+'**')
+            z[2] = traceroute(z[2])
         if float(z[1]) == float(curpp):
             f = open('list.txt', 'r')
             contents = f.read()
@@ -130,6 +158,12 @@ async def on_message(message):
         contents = f.read()
         f.close()
         await message.channel.send(contents)
+    
+    if z[0] == '$ registerns':
+        f = open('horny-dns.txt', 'a')
+        f.write(z[1] + ':' + z[2] + ':;\n')
+        f.close()
+        await message.channel.send('Registered name.')
         
     if z[0] == '$ log':
         f = open('list.txt', 'r')
@@ -137,6 +171,13 @@ async def on_message(message):
         f.close()
         await message.author.send(contents)
         await message.channel.send('User has requested a copy of list.txt - check DM')
+        
+    if z[0] == '$ nslookup':
+        f = open('horny-dns.txt', 'r')
+        contents = f.read()
+        f.close()
+        await message.author.send(contents)
+        await message.channel.send('User has requested a copy of horny-dns.txt - check DM')
         
     if z[0] == '$ ping':
         await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
@@ -150,10 +191,12 @@ async def on_message(message):
 
         
         
-    if z[0] == '$ poll':
+    if message.content.startswith('$ poll'):
+        z = message.content.split(";")
         ok = 1
         msg = message.content
         str(msg)
+        numberofoptionsandtime = str(z[2]).split(':')
         
         offset = find_nth(msg, ';', 2)
         #await message.channel.send(msg[offset:])
@@ -172,7 +215,7 @@ async def on_message(message):
                 
             await message.channel.send('POLL: '+z[1])
         
-            qty = int(z[2])
+            qty = int(numberofoptionsandtime[0])
             options = []
         
             while qty > 0:
@@ -180,7 +223,7 @@ async def on_message(message):
                 options.append(z[qty + 2])
                 qty = qty - 1
             
-            time.sleep(6)
+            time.sleep(int(numberofoptionsandtime[1]))
             await message.channel.send('Polling has closed. Counting results...')
             try:
                 f = requests.get('http://71.255.240.10:8080/textengine/sitechats/voting-tmp', timeout=15)
@@ -193,7 +236,7 @@ async def on_message(message):
                 await message.channel.send(':no_entry_sign: Connection timed out')
                 
                 
-        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=CORRECTADMINKEY&key=CORRECTADMINKEY')
+        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=lets change the password&key=CORRECtADMINKEY')
         await message.channel.send(f.text)
     
     
