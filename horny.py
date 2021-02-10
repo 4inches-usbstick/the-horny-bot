@@ -160,10 +160,13 @@ async def on_message(message):
         await message.channel.send(contents)
     
     if z[0] == '$ registerns':
-        f = open('horny-dns.txt', 'a')
-        f.write(z[1] + ':' + z[2] + ':;\n')
-        f.close()
-        await message.channel.send('Registered name.')
+        if float(z[3]) == float(curpp):
+            f = open('horny-dns.txt', 'a')
+            f.write(z[1] + ':' + z[2] + ':;\n')
+            f.close()
+            await message.channel.send('Registered name.')
+        else:
+            await message.channel.send('Error: invalid key')
         
     if z[0] == '$ log':
         f = open('list.txt', 'r')
