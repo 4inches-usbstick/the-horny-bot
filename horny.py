@@ -3,14 +3,19 @@ import discord
 import time
 import requests
 import random
+import configparser
 print('HRN')
 crimes = ['horny','assholery','hate','fire','carbon-monoxide','bullshit','illegal','borderline-illegal','excessive','w-t-a-f']
 #[being too horny], [being just an asshole], [hateful speech], [starting unnecessacry crap], [drowning in toxcity - especially for debates or discussions - fallacies such as ad hominem], [spreading bullshit]
 
+configurationparser = configparser.ConfigParser()
 
+try: configurationparser.read("main.cfg")
+except configparser.Error: print("unable to load config!")
 
+bottoken = configurationparser["security"]["token"]
+textenginehost = configurationparser["textengine"]['host']
 
-        
 def pull(puller, perp, crime, time):
     f = open('list.txt', 'a')
     if crime in crimes:
@@ -186,14 +191,11 @@ async def on_message(message):
         await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
         
         try:
-            awa = requests.get('http://71.255.240.10:8080/textengine/sitechats/sendmsg_integration.php', timeout=15)
+            awa = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/sendmsg_integration.php', timeout=15)
             await message.channel.send('CBE server response time: '+str(awa.elapsed))
         except:
             await message.channel.send('CBE server is dead.')
-        
 
-        
-        
     if message.content.startswith('$ poll'):
         z = message.content.split(";")
         ok = 1
@@ -212,7 +214,7 @@ async def on_message(message):
             await message.channel.send('Attempting to open Chatbox... (all other commands will be suspended during this procedure)')
             
             try:
-                f = requests.get('http://71.255.240.10:8080/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer', timeout=15)
+                f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer', timeout=15)
             except:
                 await message.channel.send(':no_entry_sign: Connection timed out - users will not be able to vote for the poll')
                 
@@ -222,14 +224,14 @@ async def on_message(message):
             options = []
         
             while qty > 0:
-                await message.channel.send(z[qty + 2] + ' - ' + 'http://71.255.240.10:8080/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
+                await message.channel.send(z[qty + 2] + ' - ' + 'http://' + textenginehost + ':8080/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
                 options.append(z[qty + 2])
-                qty = qty - 1
+                qty -= 1
             
             time.sleep(int(numberofoptionsandtime[1]))
             await message.channel.send('Polling has closed. Counting results...')
             try:
-                f = requests.get('http://71.255.240.10:8080/textengine/sitechats/voting-tmp', timeout=15)
+                f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/voting-tmp', timeout=15)
                 g = f.text
             
                 for i in options:
@@ -239,8 +241,7 @@ async def on_message(message):
                 await message.channel.send(':no_entry_sign: Connection timed out')
                 
                 
-        f = requests.get('http://71.255.240.10:8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=lets change the password&key=CORRECtADMINKEY')
+        f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=lets change the password&key=CORRECtADMINKEY')
         await message.channel.send(f.text)
-    
-    
-client.run('bot token')
+
+client.run(bottoken)
