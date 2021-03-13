@@ -1,2 +1,2 @@
-all necessary data except the help message will be stored here
+all activations of the horny alarm will be logged here
 

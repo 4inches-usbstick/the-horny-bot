@@ -15,6 +15,7 @@ except configparser.Error: print("unable to load config!")
 
 bottoken = configurationparser["security"]["token"]
 textenginehost = configurationparser["textengine"]['host']
+default_to = int(configurationparser["textengine"]["timeout"])
 
 def pull(puller, perp, crime, time):
     f = open('list.txt', 'a')
@@ -191,7 +192,7 @@ async def on_message(message):
         await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
         
         try:
-            awa = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/sendmsg_integration.php', timeout=15)
+            awa = requests.get('http://' + textenginehost + '/textengine/sitechats/sendmsg_integration.php?preventcache=' + str(random.randint(100, 999)), timeout=default_to)
             await message.channel.send('CBE server response time: '+str(awa.elapsed))
         except:
             await message.channel.send('CBE server is dead.')
@@ -213,10 +214,10 @@ async def on_message(message):
         if ok == 1:
             await message.channel.send('Attempting to open Chatbox... (all other commands will be suspended during this procedure)')
             
-            try:
-                f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer', timeout=15)
-            except:
-                await message.channel.send(':no_entry_sign: Connection timed out - users will not be able to vote for the poll')
+            #try:
+            f = requests.get('http://' + textenginehost + '/textengine/sitechats/newchat_integration.php?newname=voting-tmp&option=l&rurl=norefer', timeout=default_to)
+            #except:
+                #await message.channel.send(':no_entry_sign: Connection timed out - users will not be able to vote for the poll')
                 
             await message.channel.send('POLL: '+z[1])
         
@@ -224,14 +225,14 @@ async def on_message(message):
             options = []
         
             while qty > 0:
-                await message.channel.send(z[qty + 2] + ' - ' + 'http://' + textenginehost + ':8080/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
+                await message.channel.send(z[qty + 2] + ' - ' + 'http://' + textenginehost + '/textengine/sitechats/sendmsg_integration.php?write=voting-tmp&msg='+z[qty+2]+'&encoderm=UTF-8&namer=vote-&rurl=norefer')
                 options.append(z[qty + 2])
                 qty -= 1
             
             time.sleep(int(numberofoptionsandtime[1]))
             await message.channel.send('Polling has closed. Counting results...')
             try:
-                f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/voting-tmp', timeout=15)
+                f = requests.get('http://' + textenginehost + '/textengine/sitechats/voting-tmp', timeout=default_to)
                 g = f.text
             
                 for i in options:
@@ -241,7 +242,20 @@ async def on_message(message):
                 await message.channel.send(':no_entry_sign: Connection timed out')
                 
                 
-        f = requests.get('http://' + textenginehost + ':8080/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass=lets change the password&key=CORRECtADMINKEY')
-        await message.channel.send(f.text)
+        if configurationparser["textengine"]["uid_ukey"] != 'use':
+            #try:
+            print('not uidukey')
+            f = requests.get('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass='+configurationparser["textengine"]["textengine_password"])
+            await message.channel.send(f.text)
+            print('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&pass='+configurationparser["textengine"]["textengine_password"])
+            #except:
+                #await message.channel.send(':no_entry_sign: Connection timed out - failed to send DEL command')
+        if configurationparser["textengine"]["uid_ukey"] == 'use':
+            try:
+                print('uidukey')
+                f = requests.get('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp&uid='+configurationparser["textengine"]["textengine_uid"]+'&ukey='+configurationparser["textengine"]["textengine_ukey"])
+                await message.channel.send(f.text)
+            except:
+                await message.channel.send(':no_entry_sign: Connection timed out - failed to send DEL command (UID/UKEY)')
 
 client.run(bottoken)
