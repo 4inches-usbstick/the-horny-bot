@@ -1,7 +1,7 @@
 
 
 
-#the-horny-bot
+# the-horny-bot
 discord bot to keep track of instances of people being assholish, horny, toxic, etc.
 
 Changed on 12 Mar 2021:
