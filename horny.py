@@ -75,8 +75,15 @@ def traceroute(username):
     else:
         return 'Lookup failed! Could not find user'
 
-   
-client = discord.Client()
+intents = discord.Intents.default()
+if configurationparser["security"]["open_pgi"] == 'True':
+    yee = True
+else:
+    yee = False
+intents.members = yee
+client = discord.Client(intents=intents)
+#client = discord.Client()
+
 
 async def poller(z, channeldes, msg):
     global configurationparser, textenginehost, default_to
@@ -259,6 +266,39 @@ async def on_message(message):
         f.close()
         await message.author.send(contents)
         await message.channel.send('User has requested a copy of horny-dns.txt - check DM')
+    
+    if z[0] == '$ cgu':
+        if not bool(configurationparser["security"]["open_pgi"]):
+            await message.channel.send('fatal: priviledged intents not set, cannot continue execution')
+            return 100
+        xmsg = message.guild.members
+        ids = []
+        for i in xmsg:
+            ids.append(i.id)
+        index = random.randint(0, len(xmsg) - 1)
+        mention = "<@"+str(ids[index])+">"
+        try:
+            messag = str(z[1]).replace('<user>', mention)
+            await message.channel.send(messag)
+        except IndexError:
+            await message.channel.send(mention)
+
+    if z[0] == '$ cgu-noping':
+        if not bool(configurationparser["security"]["open_pgi"]):
+            await message.channel.send('fatal: priviledged intents not set, cannot continue execution')
+            return 100
+        
+        xmsg = message.guild.members
+        ids = []
+        for i in xmsg:
+            ids.append(i.id)
+        index = random.randint(0, len(xmsg) - 1)
+        mention = "<User ID "+str(ids[index])+">"
+        try:
+            messag = str(z[1]).replace('<user>', mention)
+            await message.channel.send(messag)
+        except IndexError:
+            await message.channel.send(mention)
         
     if z[0] == '$ ping':
         await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
@@ -273,4 +313,9 @@ async def on_message(message):
         z = message.content.split(";")
         print(type(message.channel.id))
         await poller(z, message.channel.id, message.content)
-client.run(bottoken)
+
+        
+try:
+    client.run(bottoken)
+except:
+    input('Unable to start bot because no priviledged intents')

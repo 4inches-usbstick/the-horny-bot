@@ -17,8 +17,10 @@ to see someone's stats: $ stat;<FULL-DISCORD-TAG>;<CRIME>
 
 to hold a poll: $ poll;<POLL-PROMPT>;<NUMBER-OF-CHOICES>:<POLL-TIME>;<CHOICE>;<CHOICE> (goes on for as many choices as is listed)
 
+to roll the wheel: $ cgu;<user> did something (<user> replaces the ping that this randomly selected user gets, so that you can choose how to craft your sentence). use $ cgu-noping for a user id instead of ping
+
 to see the horny log: $ log (a DM will be sent)
 to see naming routings: $ nslookup (a DM will be sent)
 
-make sure to use the person's REAL discord name, not their nickname
+make sure to use the person's REAL discord name when pulling or looking up a user, not their nickname
 and yes, the space after the '$' is required
