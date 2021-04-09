@@ -268,7 +268,7 @@ async def on_message(message):
         await message.channel.send('User has requested a copy of horny-dns.txt - check DM')
     
     if z[0] == '$ cgu':
-        if not bool(configurationparser["security"]["open_pgi"]):
+        if configurationparser["security"]["open_pgi"] != 'True':
             await message.channel.send('fatal: priviledged intents not set, cannot continue execution')
             return 100
         xmsg = message.guild.members
@@ -287,7 +287,7 @@ async def on_message(message):
             await message.channel.send(mention)
 
     if z[0] == '$ cgu-noping':
-        if not bool(configurationparser["security"]["open_pgi"]):
+        if configurationparser["security"]["open_pgi"] != 'True':
             await message.channel.send('fatal: priviledged intents not set, cannot continue execution')
             return 100
         
