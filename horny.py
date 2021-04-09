@@ -272,6 +272,9 @@ async def on_message(message):
             await message.channel.send('fatal: priviledged intents not set, cannot continue execution')
             return 100
         xmsg = message.guild.members
+        if '<user>' not in str(z[1]):
+            await message.channel.send('You need to include <user> somewhere to construct a message')
+            return 0
         ids = []
         for i in xmsg:
             ids.append(i.id)
@@ -294,6 +297,9 @@ async def on_message(message):
             ids.append(i.id)
         index = random.randint(0, len(xmsg) - 1)
         mention = "<User ID "+str(ids[index])+">"
+        if '<user>' not in str(z[1]):
+            await message.channel.send('You need to include <user> somewhere to construct a message')
+            return 0
         try:
             messag = str(z[1]).replace('<user>', mention)
             await message.channel.send(messag)
