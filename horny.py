@@ -318,4 +318,4 @@ async def on_message(message):
 try:
     client.run(bottoken)
 except:
-    input('Unable to start bot because no priviledged intents')
+    input('Unable to start bot, check if priviledged intents are enabled for this bot')
