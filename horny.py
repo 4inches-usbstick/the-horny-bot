@@ -296,7 +296,7 @@ async def on_message(message):
         for i in xmsg:
             ids.append(i.id)
         index = random.randint(0, len(xmsg) - 1)
-        mention = "<User ID "+str(ids[index])+">"
+        mention = "<User "+str(xmsg[index])+">"
         if '<user>' not in str(z[1]):
             await message.channel.send('You need to include <user> somewhere to construct a message')
             return 0

@@ -1,2 +1,2 @@
 --DNS LOOKUP--
-local:testing#6969:;
+local:testing#6969;
