@@ -15,6 +15,8 @@ the <CRIME> argument must be one of the preset crimes
 
 to see someone's stats: $ stat;<FULL-DISCORD-TAG>;<CRIME>
 
+to get a random index of an array: $ array;<DELIMITER>;<ITEMS SEPARATED BY DELIMITER>
+
 to hold a poll: $ poll;<POLL-PROMPT>;<NUMBER-OF-CHOICES>:<POLL-TIME>;<CHOICE>;<CHOICE> (goes on for as many choices as is listed)
 
 to roll the wheel: $ cgu;<user> did something (<user> replaces the ping that this randomly selected user gets, so that you can choose how to craft your sentence). use $ cgu-noping for a user id instead of ping

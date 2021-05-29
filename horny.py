@@ -142,6 +142,7 @@ async def poller(z, channeldes, msg):
                 #await channel.send(f.text)
                 await channel.send('Chatbox closed')
                 print('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp'+rint_cb+'&pass='+configurationparser["textengine"]["textengine_password"])
+                await channel.send(f.text[0:1999])
             except:
                 await channel.send(':no_entry_sign: Connection timed out - failed to send DEL command')
                 return 0
@@ -150,7 +151,7 @@ async def poller(z, channeldes, msg):
                 print('uidukey')
                 len('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp'+rint_cb+'&uid='+configurationparser["textengine"]["textengine_uid"]+'&ukey='+configurationparser["textengine"]["textengine_ukey"])
                 f = requests.get('http://' + textenginehost + '/textengine/sitechats/terminalprocess.php?cmd=del&params=voting-tmp'+rint_cb+'&uid='+configurationparser["textengine"]["textengine_uid"]+'&ukey='+configurationparser["textengine"]["textengine_ukey"])
-            #await channel.send(f.text[:1999])
+                await channel.send(f.text[0:1999])
                 await channel.send('Chatbox closed (UID/UKEY)')
             except:
                 await channel.send(':no_entry_sign: Connection timed out - failed to send DEL command (UID/UKEY)')
@@ -243,7 +244,7 @@ async def on_message(message):
         contents = f.read()
         f.close()
         await message.channel.send(contents)
-    
+               
     if z[0] == '$ registerns':
         if float(z[3]) == float(curpp):
             f = open('horny-dns.txt', 'a')
@@ -305,6 +306,10 @@ async def on_message(message):
             await message.channel.send(messag)
         except IndexError:
             await message.channel.send(mention)
+            
+    if z[0] == '$ array':
+        things = z[2].split(str(z[1]))
+        await message.channel.send(things[random.randint(0,len(things) - 1)])
         
     if z[0] == '$ ping':
         await message.channel.send('Bot latency: {0}'.format(round(client.latency, 1)))
@@ -318,9 +323,7 @@ async def on_message(message):
     if message.content.startswith('$ poll'):
         z = message.content.split(";")
         print(type(message.channel.id))
-        await poller(z, message.channel.id, message.content)
-
-        
+        await poller(z, message.channel.id, message.content)        
 try:
     client.run(bottoken)
 except:
